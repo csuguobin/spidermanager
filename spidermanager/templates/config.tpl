@@ -19,7 +19,7 @@
     "need-auth": true
   },
    "phantomjs": {
-   "phantomjs-path":"/home/spd/phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
+   "phantomjs-path":"/home/spd/app/phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
    "ports": "{{ ports }}"
   }
 }
