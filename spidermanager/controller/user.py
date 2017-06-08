@@ -176,18 +176,15 @@ def setPhantomjs():
     session['startport'] = startport
     session['endport'] = endport
     print startport,endport
-    f0=open(basedir + "/templates/config.tpl.bak","r")
+    f0=open(basedir + "/templates/config.tpl","r")
     str_f0 = f0.read()
     f0.close()
-    tpl = Template(str_f0)    
-    phantomjs_endpoint = ""
+    tpl = Template(str_f0)
     ports = ""
     for i in range(int(startport),int(endport)+1):
         if i != int(session['endport']):
-            phantomjs_endpoint = phantomjs_endpoint+"127.0.0.1:"+str(i)+","
             ports = ports+str(i)+","
         else:
-            phantomjs_endpoint = phantomjs_endpoint+"127.0.0.1:"+str(i)
             ports = ports+str(i)
     config =  tpl.render(
         taskdb="{{ taskdb }}",
@@ -198,7 +195,6 @@ def setPhantomjs():
         username="{{ username }}",
         webuiport="{{ webuiport }}",
         password="{{ password }}",
-        phantomjs_endpoint = phantomjs_endpoint,
         ports = ports
     )
     f1=open(basedir + "/templates/config.tpl","wb")
