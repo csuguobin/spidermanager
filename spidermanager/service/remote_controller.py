@@ -196,7 +196,35 @@ class RemoteController:
         self.startfetcher(hostname, username, password, user_type)
         self.startprocessor(hostname, username, password, user_type)
         self.startresultworker(hostname, username, password)
-    
+
+    def reloadNginx(self, hostname, username, password):
+        command = '/home/spd/app/nginx/sbin/nginx -s reload'
+        print command
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname=hostname, username=username, password=password)
+        stdin, stdout, stderr = ssh.exec_command(command=command)
+        print stderr.read()
+        print stdout.read()
+        ssh.close()
+
+    def updateNginxConfig(self, hostname, username, password):
+        t = paramiko.Transport(hostname, port)
+        t.connect(username=username, password=password)
+        sftp = paramiko.SFTPClient.from_transport(t)
+        local_path = "/home/spd/spidermanager/server/spidermanager/tmp/phantomjs.conf"
+        remote_path = "/home/spd/spidermanager/runtime/phantomjs.conf"
+        print local_path
+        sftp.put(local_path, remote_path)
+        print self.config_path
+        t.close
+
+
+    def reloadNginxAll(self):
+        for i in range(0, len(allhosts)):
+            self.updateNginxConfig(allhosts[i], username, password)
+            self.reloadNginx(allhosts[i], username, password)
+
     def startPhantomjs(self):
         command = 'nohup python ' + engine_pyspider_dir + '/run.py -c ' + self.config_path + ' phantomjs &>> ' + self.log_path_slave + ' &'
         print command

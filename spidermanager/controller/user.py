@@ -2,6 +2,7 @@
 import ConfigParser
 import base64
 import json
+import os
 
 from flask import request, redirect, url_for, jsonify, session
 
@@ -191,33 +192,31 @@ def stopPhantomjs():
 def setPhantomjs():
     startport = request.values.get('startport')
     endport = request.values.get('endport')
-    # session['startport'] = startport
-    # session['endport'] = endport
     print startport,endport
-    f0=open(basedir + "/templates/config.tpl","r")
+    f0=open(basedir + "/templates/phantomjs.tpl","r")
     str_f0 = f0.read()
     f0.close()
     tpl = Template(str_f0)
     ports = ""
+    serverlist = ""
+    base_server_str1="    server 127.0.0.1:"
+    base_server_str2=";\n"
     for i in range(int(startport),int(endport)+1):
         if i != int(endport):
             ports = ports+str(i)+","
         else:
             ports = ports+str(i)
-    # config =  tpl.render(
-    #     taskdb="{{ taskdb }}",
-    #     projectdb="{{ projectdb }}",
-    #     resultdb="{{ resultdb }}",
-    #     schedulerhost="{{ schedulerhost }}",
-    #     schedulerport="{{ schedulerport }}",
-    #     username="{{ username }}",
-    #     webuiport="{{ webuiport }}",
-    #     password="{{ password }}",
-    #     ports = ports
-    # )
-    # f1=open(basedir + "/templates/config.tpl","wb")
-    # f1.write(config)
-    # f1.close()
+        serverlist = base_server_str1 + str(i) + base_server_str2
+    content = tpl.render(
+        serverlist=serverlist,
+    )
+
+    if os.path.exists(basedir + "/tmp/phantomjs.conf"):
+        os.remove(basedir + "/tmp/phantomjs.conf")
+
+    f1=open(basedir + "/tmp/phantomjs.conf","wb")
+    f1.write(content)
+    f1.close()
 
     config = ConfigParser.ConfigParser()
 
@@ -230,6 +229,7 @@ def setPhantomjs():
     from spidermanager.service.remote_controller import RemoteController
     rc = RemoteController("phantomjs")#Phantomjs日志文件phantomjs.log
     rc.stopPhantomjs()
+    rc.reloadNginxAll()
     rc.startPhantomjs()
     resp = {
         "phantomjsPorts":startport+" to "+endport,
