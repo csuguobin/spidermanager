@@ -104,8 +104,8 @@ function loadPhantomjs(){
     	      "method": "GET"
     	    };
     $.ajax(settings).done(function (response) {
-    	$("#startport").attr('placeholder',response.startport);
-    	$("#endport").attr('placeholder',response.endport);
+    	$("#startport").val(response.startport);
+    	$("#endport").attr(response.endport);
     });
 }
 
