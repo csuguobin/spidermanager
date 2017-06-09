@@ -105,7 +105,7 @@ function loadPhantomjs(){
     	    };
     $.ajax(settings).done(function (response) {
     	$("#startport").val(response.startport);
-    	$("#endport").attr(response.endport);
+    	$("#endport").val(response.endport);
     });
 }
 
