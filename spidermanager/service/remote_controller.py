@@ -96,7 +96,7 @@ class RemoteController:
     # prepare(hostname, username, password)
 
     def killallcomponent(self, hostname, username, password):
-        command = 'ps -ef |grep ' + self.user +'.json |awk \'{print $2}\'|xargs kill -s 9'
+        command = 'ps -ef |grep ' + self.user +'.json | grep -v grep |awk \'{print $2}\'|xargs kill -s 9'
         print command
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
