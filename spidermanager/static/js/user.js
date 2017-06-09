@@ -71,10 +71,15 @@ $('#start-phantomjs-btn').on('click', function (e) {
       }
     };
 
-    $.ajax(settings).done(function (response) {
-    	alert("启动成功!");
-    	reload();
-    });
+    if($('#startport').val()<$('#endport').val()){
+        $.ajax(settings).done(function (response) {
+    	    alert("启动成功!");
+    	    reload();
+        });
+    }else{
+        alert("端口不符合条件!");
+    }
+
 });
 
 $('#stop-phantomjs-btn').on('click', function (e) {
