@@ -206,7 +206,7 @@ def setPhantomjs():
             ports = ports+str(i)+","
         else:
             ports = ports+str(i)
-        serverlist = base_server_str1 + str(i) + base_server_str2
+        serverlist = serverlist + base_server_str1 + str(i) + base_server_str2
     content = tpl.render(
         serverlist=serverlist,
     )
