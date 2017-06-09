@@ -171,7 +171,7 @@ def loadPhantomjs():
 
         resp = {
             "startport":list[0],
-            "endport":list[len(list)-1]
+            "endport":list[1]
         }
     except:
         resp = {
@@ -197,15 +197,15 @@ def setPhantomjs():
     str_f0 = f0.read()
     f0.close()
     tpl = Template(str_f0)
-    ports = ""
+    ports = startport+","+endport
     serverlist = ""
     base_server_str1="    server 127.0.0.1:"
     base_server_str2=";\n"
     for i in range(int(startport),int(endport)+1):
-        if i != int(endport):
-            ports = ports+str(i)+","
-        else:
-            ports = ports+str(i)
+        # if i != int(endport):
+        #     ports = ports+str(i)+","
+        # else:
+        #     ports = ports+str(i)
         serverlist = serverlist + base_server_str1 + str(i) + base_server_str2
     content = tpl.render(
         serverlist=serverlist,
