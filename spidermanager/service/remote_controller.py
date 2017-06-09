@@ -198,7 +198,20 @@ class RemoteController:
         self.startresultworker(hostname, username, password)
 
     def reloadNginx(self, hostname, username, password):
-        command = '/home/spd/app/nginx/sbin/nginx -s reload'
+        try:
+            command = '/home/spd/app/nginx/sbin/nginx -s stop'
+            print command
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(hostname=hostname, username=username, password=password)
+            stdin, stdout, stderr = ssh.exec_command(command=command)
+            print stderr.read()
+            print stdout.read()
+            ssh.close()
+        except Exception, e:
+            print e
+
+        command = '/home/spd/app/nginx/sbin/nginx'
         print command
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
