@@ -222,7 +222,7 @@ class RemoteController:
 
     
     def stopPhantomjs(self):
-        command = 'killall phantomjs'
+        command = 'killall phantomjs;ps -ef |grep phantomjs | grep -v grep |awk \'{print $2}\'|xargs kill -s 9'
         print command
         for i in range(0, len(managerhosts)):
             ssh = paramiko.SSHClient()
