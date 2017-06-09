@@ -200,43 +200,50 @@ class RemoteController:
     def startPhantomjs(self):
         command = 'nohup python ' + engine_pyspider_dir + '/run.py -c ' + self.config_path + ' phantomjs &>> ' + self.log_path_slave + ' &'
         print command
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         for i in range(0, len(managerhosts)):
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             self.prepare(managerhosts[i], username, password)
             #需要注意：https://stackoverflow.com/questions/22251258/paramiko-error-servname-not-supported-for-ai-socktype
             ssh.connect(hostname=managerhosts[i], username=username, password=password)
             stdin, stdout, stderr = ssh.exec_command(command=command0+command)
             print stderr.read()
             print stdout.read()
+            ssh.close()
         for i in range(0, len(workerhosts)):
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             self.prepare(workerhosts[i], username, password)
             ssh.connect(hostname=workerhosts[i], username=username, password=password)
             stdin, stdout, stderr = ssh.exec_command(command=command0+command)
             print stderr.read()
             print stdout.read()
-        ssh.close()
+            ssh.close()
+
     
     def stopPhantomjs(self):
         command = 'ps -ef | grep phantomjs | grep python |awk \'{print $2}\'|xargs kill -s 9;killall phantomjs'
         print command
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         for i in range(0, len(managerhosts)):
-            self.prepare(managerhosts[i], username, password)
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            # self.prepare(managerhosts[i], username, password)
             #需要注意：https://stackoverflow.com/questions/22251258/paramiko-error-servname-not-supported-for-ai-socktype
             ssh.connect(hostname=managerhosts[i], username=username, password=password)
             stdin, stdout, stderr = ssh.exec_command(command=command0+command)
             print stderr.read()
             print stdout.read()
+            ssh.close()
         for i in range(0, len(workerhosts)):
-            self.prepare(workerhosts[i], username, password)
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            # self.prepare(workerhosts[i], username, password)
             ssh.connect(hostname=workerhosts[i], username=username, password=password)
             stdin, stdout, stderr = ssh.exec_command(command=command0+command)
             print stderr.read()
             print stdout.read()
-        ssh.close()
-    
+            ssh.close()
+
     def startallmanagernode(self):
         for i in range(0, len(managerhosts)):
             self.startmanagernode(managerhosts[i], username, password)
