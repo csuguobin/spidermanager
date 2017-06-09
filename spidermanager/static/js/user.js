@@ -59,7 +59,7 @@ $('#save-btn').on('click', function (e) {
     });
 });
 
-$('#submit-btn').on('click', function (e) {
+$('#start-phantomjs-btn').on('click', function (e) {
     var settings = {
       "async": true,
       "dataType" : "json",
@@ -72,7 +72,21 @@ $('#submit-btn').on('click', function (e) {
     };
 
     $.ajax(settings).done(function (response) {
-    	alert("设置成功!");
+    	alert("启动成功!");
+    	reload();
+    });
+});
+
+$('#stop-phantomjs-btn').on('click', function (e) {
+    var settings = {
+      "async": true,
+      "dataType" : "json",
+      "url": "user/stopPhantomjs",
+      "method": "POST"
+    };
+
+    $.ajax(settings).done(function (response) {
+    	alert("停止成功!");
     	reload();
     });
 });

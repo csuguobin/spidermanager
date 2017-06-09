@@ -179,6 +179,14 @@ def loadPhantomjs():
         }
     return json.dumps(resp)
 
+@app.route("/user/stopPhantomjs", methods=['GET','POST'])
+def stopPhantomjs():
+
+    from spidermanager.service.remote_controller import RemoteController
+    rc = RemoteController("phantomjs")#Phantomjs日志文件phantomjs.log
+    rc.stopPhantomjs()
+    return json.dumps({})
+
 @app.route("/user/setPhantomjs", methods=['GET','POST'])
 def setPhantomjs():
     startport = request.values.get('startport')
