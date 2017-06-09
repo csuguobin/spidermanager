@@ -142,7 +142,7 @@ class RemoteController:
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname=hostname, username=username, password=password)
         if user_type == 'ultimate':
-            num_fetcher = 50
+            num_fetcher = 100
         elif user_type == 'premium':
             num_fetcher = 10
         else:
@@ -162,9 +162,9 @@ class RemoteController:
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname=hostname, username=username, password=password)
         if user_type == 'ultimate':
-            num_fetcher = 25
+            num_fetcher = 100
         elif user_type == 'premium':
-            num_fetcher = 5
+            num_fetcher = 10
         else:
             num_fetcher = 1
         for i in range(0,num_fetcher):
@@ -175,15 +175,25 @@ class RemoteController:
     
     # startprocessor(hostname, username, password)
     
-    def startresultworker(self, hostname, username, password):
+    def startresultworker(self, hostname, username, password, user_type):
         command = 'nohup python ' + engine_pyspider_dir + '/run.py -c ' + self.config_path + ' result_worker &>> ' + self.log_path_slave + ' &'
         print command
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname=hostname, username=username, password=password)
-        stdin, stdout, stderr = ssh.exec_command(command=command0+command)
-        print stderr.read()
-        print stdout.read()
+        # stdin, stdout, stderr = ssh.exec_command(command=command0+command)
+        # print stderr.read()
+        # print stdout.read()
+        if user_type == 'ultimate':
+            num_result_worker = 20
+        elif user_type == 'premium':
+            num_result_worker = 2
+        else:
+            num_result_worker = 1
+        for i in range(0,num_result_worker):
+            stdin, stdout, stderr = ssh.exec_command(command=command0+command)
+            print stderr.read()
+            print stdout.read()
         ssh.close()
 
     def startmanagernode(self, hostname, username, password):
@@ -195,7 +205,7 @@ class RemoteController:
         self.prepare(hostname, username, password)
         self.startfetcher(hostname, username, password, user_type)
         self.startprocessor(hostname, username, password, user_type)
-        self.startresultworker(hostname, username, password)
+        self.startresultworker(hostname, username, password, user_type)
 
     def reloadNginx(self, hostname, username, password):
         try:
