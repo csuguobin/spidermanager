@@ -4,7 +4,8 @@
   "resultdb": "sqlalchemy+oracle+resultdb://{{ resultdb }}",
   "scheduler":{
     "xmlrpc-host":"{{ schedulerhost }}",
-    "xmlrpc-port":"{{ schedulerport }}"
+    "xmlrpc-port":"{{ schedulerport }}",
+    "threads":"300"
   },
   "message_queue": "redis://20.26.26.43:6379/db",
   "fetcher":{

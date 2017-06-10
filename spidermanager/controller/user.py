@@ -200,7 +200,7 @@ def setPhantomjs():
     ports = startport+","+endport
     serverlist = ""
     base_server_str1="    server 127.0.0.1:"
-    base_server_str2=";\n"
+    base_server_str2=" weight=1;\n"
     for i in range(int(startport),int(endport)+1):
         # if i != int(endport):
         #     ports = ports+str(i)+","
