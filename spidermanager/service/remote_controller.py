@@ -140,9 +140,9 @@ class RemoteController:
         print command
 
         if user_type == 'ultimate':
-            num_fetcher = 5
+            num_fetcher = 100
         elif user_type == 'premium':
-            num_fetcher = 3
+            num_fetcher = 10
         else:
             num_fetcher = 1
         for i in range(0,num_fetcher):
@@ -161,9 +161,9 @@ class RemoteController:
         print command
 
         if user_type == 'ultimate':
-            num_fetcher = 5
+            num_fetcher = 100
         elif user_type == 'premium':
-            num_fetcher = 3
+            num_fetcher = 10
         else:
             num_fetcher = 1
         for i in range(0,num_fetcher):
@@ -184,7 +184,7 @@ class RemoteController:
         # print stderr.read()
         # print stdout.read()
         if user_type == 'ultimate':
-            num_result_worker = 5
+            num_result_worker = 30
         elif user_type == 'premium':
             num_result_worker = 3
         else:
