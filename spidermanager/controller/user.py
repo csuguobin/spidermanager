@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import ConfigParser
 import base64
 import json
+import os
 
 from flask import request, redirect, url_for, jsonify, session
 
@@ -158,9 +160,18 @@ def start():
 @app.route("/user/loadPhantomjs", methods=['GET','POST'])
 def loadPhantomjs():
     try:
+
+        config = ConfigParser.ConfigParser()
+
+        config.readfp(open(basedir+'/setting.ini'))
+
+        ports = config.get("phantomjs","ports")
+
+        list = ports.split(",")
+
         resp = {
-            "startport":session['startport'],
-            "endport":session['endport']
+            "startport":list[0],
+            "endport":list[1]
         }
     except:
         resp = {
@@ -169,44 +180,56 @@ def loadPhantomjs():
         }
     return json.dumps(resp)
 
+@app.route("/user/stopPhantomjs", methods=['GET','POST'])
+def stopPhantomjs():
+
+    from spidermanager.service.remote_controller import RemoteController
+    rc = RemoteController("phantomjs")#Phantomjs日志文件phantomjs.log
+    rc.stopPhantomjs()
+    return json.dumps({})
+
 @app.route("/user/setPhantomjs", methods=['GET','POST'])
 def setPhantomjs():
     startport = request.values.get('startport')
     endport = request.values.get('endport')
-    session['startport'] = startport
-    session['endport'] = endport
     print startport,endport
-    f0=open(basedir + "/templates/config.tpl.bak","r")
+    f0=open(basedir + "/templates/phantomjs.tpl","r")
     str_f0 = f0.read()
     f0.close()
-    tpl = Template(str_f0)    
-    phantomjs_endpoint = ""
-    ports = ""
+    tpl = Template(str_f0)
+    ports = startport+","+endport
+    serverlist = ""
+    base_server_str1="    server 127.0.0.1:"
+    base_server_str2=" weight=1;\n"
     for i in range(int(startport),int(endport)+1):
-        if i != int(session['endport']):
-            phantomjs_endpoint = phantomjs_endpoint+"127.0.0.1:"+str(i)+","
-            ports = ports+str(i)+","
-        else:
-            phantomjs_endpoint = phantomjs_endpoint+"127.0.0.1:"+str(i)
-            ports = ports+str(i)
-    config =  tpl.render(
-        taskdb="{{ taskdb }}",
-        projectdb="{{ projectdb }}",
-        resultdb="{{ resultdb }}",
-        schedulerhost="{{ schedulerhost }}",
-        schedulerport="{{ schedulerport }}",
-        username="{{ username }}",
-        webuiport="{{ webuiport }}",
-        password="{{ password }}",
-        phantomjs_endpoint = phantomjs_endpoint,
-        ports = ports
+        # if i != int(endport):
+        #     ports = ports+str(i)+","
+        # else:
+        #     ports = ports+str(i)
+        serverlist = serverlist + base_server_str1 + str(i) + base_server_str2
+    content = tpl.render(
+        serverlist=serverlist,
     )
-    f1=open(basedir + "/templates/config.tpl","wb")
-    f1.write(config)
+
+    if os.path.exists(basedir + "/tmp/phantomjs.conf"):
+        os.remove(basedir + "/tmp/phantomjs.conf")
+
+    f1=open(basedir + "/tmp/phantomjs.conf","wb")
+    f1.write(content)
     f1.close()
+
+    config = ConfigParser.ConfigParser()
+
+    config.read(basedir+'/setting.ini')
+
+    config.set("phantomjs", "ports", ports)
+
+    config.write(open(basedir+'/setting.ini', "r+"))
+
     from spidermanager.service.remote_controller import RemoteController
     rc = RemoteController("phantomjs")#Phantomjs日志文件phantomjs.log
     rc.stopPhantomjs()
+    rc.reloadNginxAll()
     rc.startPhantomjs()
     resp = {
         "phantomjsPorts":startport+" to "+endport,

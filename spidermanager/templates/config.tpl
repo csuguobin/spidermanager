@@ -4,11 +4,12 @@
   "resultdb": "sqlalchemy+oracle+resultdb://{{ resultdb }}",
   "scheduler":{
     "xmlrpc-host":"{{ schedulerhost }}",
-    "xmlrpc-port":"{{ schedulerport }}"
+    "xmlrpc-port":"{{ schedulerport }}",
+    "threads":"300"
   },
   "message_queue": "redis://20.26.26.43:6379/db",
   "fetcher":{
-    "phantomjs-endpoint": "127.0.0.1:25555,127.0.0.1:25556,127.0.0.1:25557"
+    "phantomjs-endpoint": "127.0.0.1:20000"
   },
   "queue_user": "{{ username }}",
   "webui": {
@@ -19,7 +20,7 @@
     "need-auth": true
   },
    "phantomjs": {
-   "phantomjs-path":"/home/spd/phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
-   "ports": "25555,25556,25557"
+   "phantomjs-path":"/home/spd/app/phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
+   "ports": "{{ ports }}"
   }
 }

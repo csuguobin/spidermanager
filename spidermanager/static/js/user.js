@@ -59,7 +59,7 @@ $('#save-btn').on('click', function (e) {
     });
 });
 
-$('#submit-btn').on('click', function (e) {
+$('#start-phantomjs-btn').on('click', function (e) {
     var settings = {
       "async": true,
       "dataType" : "json",
@@ -71,8 +71,27 @@ $('#submit-btn').on('click', function (e) {
       }
     };
 
+    if($('#startport').val()<$('#endport').val()){
+        $.ajax(settings).done(function (response) {
+    	    alert("启动成功!");
+    	    reload();
+        });
+    }else{
+        alert("端口不符合条件!");
+    }
+
+});
+
+$('#stop-phantomjs-btn').on('click', function (e) {
+    var settings = {
+      "async": true,
+      "dataType" : "json",
+      "url": "user/stopPhantomjs",
+      "method": "POST"
+    };
+
     $.ajax(settings).done(function (response) {
-    	alert("设置成功!");
+    	alert("停止成功!");
     	reload();
     });
 });
@@ -85,8 +104,8 @@ function loadPhantomjs(){
     	      "method": "GET"
     	    };
     $.ajax(settings).done(function (response) {
-    	$("#startport").attr('placeholder',response.startport);
-    	$("#endport").attr('placeholder',response.endport);
+    	$("#startport").val(response.startport);
+    	$("#endport").val(response.endport);
     });
 }
 

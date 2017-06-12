@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import ConfigParser
 import os
 
 from jinja2 import Template
@@ -7,6 +8,12 @@ from spidermanager.model.user import User
 from spidermanager.setting import basedir
 
 def generate_config(username):
+
+    config = ConfigParser.ConfigParser()
+
+    config.readfp(open(basedir+'/setting.ini'))
+
+    ports = config.get("phantomjs","ports")
 
     filename = basedir + "/tmp/"+ username +".json"
 
@@ -26,7 +33,8 @@ def generate_config(username):
             schedulerport="",
             username="",
             webuiport="",
-            password=""
+            password="",
+            ports=ports
         )
     else:
         user = User.query.filter_by(username=username).first()
@@ -38,7 +46,8 @@ def generate_config(username):
             schedulerport=user.schedulerport,
             username=user.username,
             webuiport=user.webuiport,
-            password=user.password
+            password=user.password,
+            ports=ports
         )
 
 
@@ -54,7 +63,6 @@ def generate_config(username):
     return filename
 
 # generate_config("aaaaaaaa")
-
 
 
 
