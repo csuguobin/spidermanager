@@ -137,66 +137,64 @@ class RemoteController:
     
     def startfetcher(self, hostname, username, password, user_type):
         command = 'nohup python ' + engine_pyspider_dir + '/run.py -c ' + self.config_path + ' fetcher &>> ' +self.log_path_slave + ' &'
-        print command
-
         if user_type == 'ultimate':
-            num_fetcher = 100
+            num_fetcher = 60
         elif user_type == 'premium':
             num_fetcher = 10
         else:
             num_fetcher = 1
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname=hostname, username=username, password=password)
         for i in range(0,num_fetcher):
-            ssh = paramiko.SSHClient()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(hostname=hostname, username=username, password=password)
+            print command
             stdin, stdout, stderr = ssh.exec_command(command=command0+command)
             print stderr.read()
             print stdout.read()
-            ssh.close()
+        ssh.close()
 
     # startfetcher(hostname, username, password)
 
     def startprocessor(self, hostname, username, password, user_type):
         command = 'nohup python ' + engine_pyspider_dir + '/run.py -c ' + self.config_path + ' processor &>> ' + self.log_path_slave + ' &'
-        print command
-
         if user_type == 'ultimate':
-            num_fetcher = 100
+            num_fetcher = 30
         elif user_type == 'premium':
             num_fetcher = 10
         else:
             num_fetcher = 1
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname=hostname, username=username, password=password)
         for i in range(0,num_fetcher):
-            ssh = paramiko.SSHClient()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(hostname=hostname, username=username, password=password)
+            print command
             stdin, stdout, stderr = ssh.exec_command(command=command0+command)
             print stderr.read()
             print stdout.read()
-            ssh.close()
+        ssh.close()
 
     # startprocessor(hostname, username, password)
 
     def startresultworker(self, hostname, username, password, user_type):
         command = 'nohup python ' + engine_pyspider_dir + '/run.py -c ' + self.config_path + ' result_worker &>> ' + self.log_path_slave + ' &'
-        print command
         # stdin, stdout, stderr = ssh.exec_command(command=command0+command)
         # print stderr.read()
         # print stdout.read()
         if user_type == 'ultimate':
-            num_result_worker = 30
+            num_result_worker = 1
         elif user_type == 'premium':
-            num_result_worker = 3
+            num_result_worker = 1
         else:
             num_result_worker = 1
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname=hostname, username=username, password=password)
         for i in range(0,num_result_worker):
-            ssh = paramiko.SSHClient()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(hostname=hostname, username=username, password=password)
+            print command
             stdin, stdout, stderr = ssh.exec_command(command=command0+command)
             print stderr.read()
             print stdout.read()
-            ssh.close()
+        ssh.close()
 
     def startmanagernode(self, hostname, username, password):
         self.prepare(hostname, username, password)
