@@ -138,7 +138,7 @@ class RemoteController:
     def startfetcher(self, hostname, username, password, user_type):
         command = 'nohup python ' + engine_pyspider_dir + '/run.py -c ' + self.config_path + ' fetcher &>> ' +self.log_path_slave + ' &'
         if user_type == 'ultimate':
-            num_fetcher = 60
+            num_fetcher = 40
         elif user_type == 'premium':
             num_fetcher = 10
         else:
@@ -158,7 +158,7 @@ class RemoteController:
     def startprocessor(self, hostname, username, password, user_type):
         command = 'nohup python ' + engine_pyspider_dir + '/run.py -c ' + self.config_path + ' processor &>> ' + self.log_path_slave + ' &'
         if user_type == 'ultimate':
-            num_fetcher = 30
+            num_fetcher = 20
         elif user_type == 'premium':
             num_fetcher = 10
         else:
