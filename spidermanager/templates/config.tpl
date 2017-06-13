@@ -5,7 +5,7 @@
   "scheduler":{
     "xmlrpc-host":"{{ schedulerhost }}",
     "xmlrpc-port":"{{ schedulerport }}",
-    "threads":"300"
+    "threads":200"
   },
   "message_queue": "redis://20.26.26.43:6379/db",
   "fetcher":{
