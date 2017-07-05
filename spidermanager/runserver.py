@@ -2,7 +2,7 @@
 from spidermanager import app
 from spidermanager import db
 
-from spidermanager.controller import main, user, login
+from spidermanager.controller import main, user, login, res_dict
 from spidermanager.setting import spdmgrport
 
 if __name__ == "__main__":

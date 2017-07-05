@@ -27,8 +27,9 @@ if PROFILE == 'dev':
     spdmgrport = 5000
     managerhosts = ['master.hadoop']
     workerhosts = ['slave1.hadoop','slave2.hadoop']
-    SQLALCHEMY_DATABASE_URI = "oracle://spdmgr:spdmgr_1Q#@oracle-datasource:1521/pdbspdmgr"
-    # SQLALCHEMY_DATABASE_URI = "oracle://SCOTT:gb666666@localhost:1521/ORCL"
+    # SQLALCHEMY_DATABASE_URI = "oracle://spdmgr:spdmgr_1Q#@oracle-datasource:1521/pdbspdmgr"
+    SQLALCHEMY_DATABASE_URI = "oracle://SCOTT:gb666666@localhost:1521/ORCL"
+    SHOW_DATABASE_URI = "oracle://SCOTT:gb666666@localhost:1521/ORCL"
     # SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://app:123456@localhost:3306/spdmgr"
     redis_nodes = [{'host':'192.168.136.130','port':7000},
                     {'host':'192.168.136.130','port':7001},
@@ -130,6 +131,7 @@ elif PROFILE == 'prod':
     managerhosts = ['10.78.238.55']
     workerhosts = ['10.78.190.228','10.78.190.229','10.78.190.230','10.78.190.231','10.78.190.232','10.78.190.233','10.78.190.234','10.78.190.235']
     SQLALCHEMY_DATABASE_URI = "oracle://spd_admin:spd_admin_1Q#@pdb_spider"
+    SHOW_DATABASE_URI = "oracle://spd_dm:spd_dm_1Q#@pdb_spider"
     redis_nodes =  [{'host':'10.78.155.61','port':16340},
                      {'host':'10.78.155.67','port':16340},
                      {'host':'10.78.155.68','port':16340},
